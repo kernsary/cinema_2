@@ -1,5 +1,5 @@
-# require_relative('./film')
-# require_relative('./ticket')
+require_relative('./film')
+require_relative('./ticket')
 require_relative('../db/sql_runner')
 
 class Customer
@@ -33,6 +33,17 @@ class Customer
     sql = "DELETE FROM customers WHERE id = $1;"
     values = [@id]
     SqlRunner.run(sql, values)
+  end
+
+  def films()
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets
+    ON films.id = tickets.film_id
+    WHERE tickets.customer_id = $1;"
+    values = [@id]
+    results = SqlRunner.run(sql, values)
+    films = Film.map_films(results)
+    return films.map{|film| film.title}
   end
 
   def self.all()

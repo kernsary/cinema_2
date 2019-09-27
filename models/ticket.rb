@@ -28,12 +28,12 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
-  def change_customer_id(new_id)
+  def update_customer_id(new_id)
     @customer_id = new_id
     update()
   end
 
-  def change_film_id(new_id)
+  def update_film_id(new_id)
     @film_id = new_id
     update()
   end
