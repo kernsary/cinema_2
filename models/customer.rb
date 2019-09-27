@@ -57,6 +57,17 @@ class Customer
     SqlRunner.run(sql)
   end
 
+  def self.one_film_customers()
+    names_of_customers = []
+    all_customers = self.all()
+    all_customers.each do |customer|
+      if customer.films.count == 1
+        names_of_customers.push(customer.name)
+      end
+    end
+    return names_of_customers
+  end
+
   def self.map_customers(data)
     return data.map{|customer| Customer.new(customer)}
   end
