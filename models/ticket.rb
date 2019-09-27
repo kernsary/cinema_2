@@ -15,9 +15,48 @@ class Ticket
   def save()
     sql = "INSERT INTO tickets (customer_id, film_id)
     VALUES ($1, $2)
-    RETURNING id"
+    RETURNING id;"
     values = [@customer_id, @film_id]
     @id = SqlRunner.run(sql, values)[0]['id'].to_i()
+  end
+
+  def update()
+    sql = "UPDATE tickets
+    SET (customer_id, film_id) = ($1, $2)
+    WHERE id = $3;"
+    values = [@customer_id, @film_id, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def change_customer_id(new_id)
+    @customer_id = new_id
+    update()
+  end
+
+  def change_film_id(new_id)
+    @film_id = new_id
+    update()
+  end
+
+  def delete()
+    sql = "DELETE FROM tickets WHERE id = $1;"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
+  def self.all()
+    sql = "SELECT * FROM tickets;"
+    results = SqlRunner.run(sql)
+    return self.map_tickets(results)
+  end
+
+  def self.delete_all()
+    sql = "DELETE FROM tickets;"
+    SqlRunner.run(sql)
+  end
+
+  def self.map_tickets(data)
+    return data.map{|ticket| Ticket.new(ticket)}
   end
 
 end
