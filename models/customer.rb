@@ -46,6 +46,13 @@ class Customer
     return films.map{|film| film.title}
   end
 
+  def check_funds()
+    sql = "SELECT funds FROM customers
+    WHERE id = $1"
+    values = [@id]
+    return SqlRunner.run(sql,values)[0]['funds'].to_i()
+  end
+
   def self.all()
     sql = "SELECT * FROM customers;"
     results = SqlRunner.run(sql)

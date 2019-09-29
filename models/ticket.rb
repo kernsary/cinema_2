@@ -18,6 +18,26 @@ class Ticket
     RETURNING id;"
     values = [@customer_id, @film_id]
     @id = SqlRunner.run(sql, values)[0]['id'].to_i()
+    customer = find_customer()
+    film = find_film()
+    customer.funds -= film.price
+    customer.update()
+  end
+
+  def find_customer()
+    sql = "SELECT * FROM customers
+    WHERE id = $1"
+    values = [@customer_id]
+    result = SqlRunner.run(sql, values)[0]
+    return Customer.new(result)
+  end
+
+  def find_film()
+    sql = "SELECT * FROM films
+    WHERE id = $1"
+    values = [@film_id]
+    result = SqlRunner.run(sql, values)[0]
+    return Film.new(result)
   end
 
   def update()
