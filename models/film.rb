@@ -38,15 +38,13 @@ class Film
 
 # EXTENSION ----------------------------------
 
-  def customers()
+  def number_of_customers()
     sql = "SELECT customers.* FROM customers
     INNER JOIN tickets
     ON customers.id = tickets.customer_id
     WHERE tickets.film_id = $1"
     values = [@id]
-    results = SqlRunner.run(sql, values)
-    customers = Customer.map_customers(results)
-    return customers.map{|customer| customer.name}
+    results = SqlRunner.run(sql, values).count
   end
 
   def self.all()

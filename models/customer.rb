@@ -50,7 +50,14 @@ class Customer
     sql = "SELECT funds FROM customers
     WHERE id = $1"
     values = [@id]
-    return SqlRunner.run(sql,values)[0]['funds'].to_i()
+    return SqlRunner.run(sql, values)[0]['funds'].to_i()
+  end
+
+  def number_of_tickets()
+    sql = "SELECT * FROM tickets
+    WHERE customer_id = $1"
+    values = [@id]
+    return SqlRunner.run(sql, values).count
   end
 
   def self.all()
