@@ -37,7 +37,7 @@ class Film
   end
 
 
-# EXTENSION ----------------------------------
+  # EXTENSION ----------------------------------
 
   def number_of_customers()
     sql = "SELECT customers.* FROM customers
@@ -48,7 +48,25 @@ class Film
     results = SqlRunner.run(sql, values).count
   end
 
+  def screenings()
+    sql = "SELECT * FROM screenings
+    WHERE film_id = $1"
+    values = [@id]
+    result = SqlRunner.run(sql, values)
+    return Screening.map_screenings(result)
+  end
+
   def most_popular_screening
+    screenings_to_check = screenings()
+    most_popular = [screenings_to_check.pop]
+    screenings_to_check.each do |screening|
+      if screening.tickets().count > most_popular[0].tickets().count
+        most_popular = [screening]
+      elsif screening.tickets().count == most_popular[0].tickets().count
+        most_popular.push(screening)
+      end
+    end
+    return most_popular
   end
 
   def self.all()
