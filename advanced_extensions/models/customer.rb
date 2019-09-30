@@ -61,6 +61,19 @@ class Customer
     return SqlRunner.run(sql, values).count
   end
 
+  def customer_wants_ticket(screening_id)
+    sql = "SELECT * FROM screenings
+    WHERE id = $1;"
+    values = [screening_id]
+    result = SqlRunner.run(sql, values)[0]
+    screening = Screening.new(result)
+    if screening.tickets.count >= screening.capacity
+      return "Sorry, that screening is sold out."
+    end
+    new_ticket = Ticket.new({'customer_id' => @id, 'film_id' => screening.film_id, 'screening_id' => screening_id})
+    new_ticket.save()
+  end
+
   def self.all()
     sql = "SELECT * FROM customers;"
     results = SqlRunner.run(sql)
