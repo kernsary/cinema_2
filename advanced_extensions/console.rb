@@ -14,11 +14,13 @@ customer1 = Customer.new({'name' => 'Sinnie File', 'funds' => 100})
 customer2 = Customer.new({'name' => 'Avid Goggler', 'funds' => 50})
 customer3 = Customer.new({'name' => 'Rid Skwerr', 'funds' => 30})
 customer4 = Customer.new({'name' => 'Rank Bajin', 'funds' => 950})
+customer5 = Customer.new({'name' => 'Fairy Nuff', 'funds' => 3})
 
 customer1.save()
 customer2.save()
 customer3.save()
 customer4.save()
+customer5.save()
 
 film1 = Film.new({'title' => 'The Weeping Meadow Strikes Again', 'price' => 12})
 film2 = Film.new({'title' => 'Star Wars Episode XXXVIII: May The Fans Be With Us', 'price' => 6})

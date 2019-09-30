@@ -61,16 +61,32 @@ class Customer
     return SqlRunner.run(sql, values).count
   end
 
-  def customer_wants_ticket(screening_id)
+  def get_screening(screening_id)
     sql = "SELECT * FROM screenings
     WHERE id = $1;"
     values = [screening_id]
     result = SqlRunner.run(sql, values)[0]
-    screening = Screening.new(result)
+    return Screening.new(result)
+  end
+
+  def get_film(screening_id)
+    screening = get_screening(screening_id)
+    sql = "SELECT * FROM films
+    WHERE id = $1"
+    values = [screening.get_film_id]
+    result = SqlRunner.run(sql, values)[0]
+    return Film.new(result)
+  end
+
+  def customer_wants_ticket(screening_id)
+    screening = get_screening(screening_id)
+    film = get_film(screening_id)
     if screening.tickets.count >= screening.capacity
       return "Sorry, that screening is sold out."
+    elsif check_funds < film.price
+      return "Sorry, you don't have enough money."
     end
-    new_ticket = Ticket.new({'customer_id' => @id, 'film_id' => screening.film_id, 'screening_id' => screening_id})
+    new_ticket = Ticket.new({'customer_id' => @id, 'film_id' => film.id, 'screening_id' => screening_id})
     new_ticket.save()
   end
 

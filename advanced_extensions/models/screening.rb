@@ -31,6 +31,10 @@ class Screening
     return Ticket.map_tickets(result)
   end
 
+  def get_film_id
+    return @film_id
+  end
+
   def self.all()
     sql = "SELECT * FROM screenings;"
     results = SqlRunner.run(sql)
